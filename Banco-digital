@@ -13,7 +13,6 @@ class ContaCorrente {
         this.data_abertura = data_abertura;
     }
 }
-
 public class Banco {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -39,17 +38,21 @@ public class Banco {
                     String nome = sc.nextLine();
                     System.out.print("Insira o número da conta: ");
                     String numero_conta = sc.nextLine();
-                    System.out.print("Insira o saldo inicial: ");
-                    double saldo = sc.nextDouble();
-                    sc.nextLine();
+                    double saldo;
+                    do {
+                        System.out.println("Insira o saldo inicial: ");
+                        saldo = sc.nextDouble();
+                        sc.nextLine();
+                        if(saldo < 200.00){
+                            System.out.println("O valor inicial não pode ser menor do que R$ 200,00");
+                        }
+                    } while (saldo < 200.00);
                     System.out.print("Insira a data de abertura (dd/mm/aaaa): ");
                     String data_abertura = sc.nextLine();
-
                     usuarios[numero_contas] = new ContaCorrente(numero_conta, nome, saldo, data_abertura);
                     System.out.println("Conta criada com sucesso!\n");
                     numero_contas++;
                     break;
-
                 case 2:
                     System.out.print("\nEntrando em sua conta.\nNúmero de conta: ");
                     String contaDigitada = sc.nextLine();
