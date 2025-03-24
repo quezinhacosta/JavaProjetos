@@ -1,0 +1,171 @@
+import java.util.Scanner;
+
+class ItemBiblioteca {
+    String titulo;
+    String ano_publicacao;
+    int numero_copias;
+
+    public ItemBiblioteca(String titulo, String ano_publicacao, int numero_copias){
+        this.titulo = titulo;
+        this.ano_publicacao = ano_publicacao;
+        this.numero_copias = numero_copias;
+    }
+}
+
+class Livro extends ItemBiblioteca {
+    String autor;
+    public Livro(String titulo, String ano_publicacao, int numero_copias, String autor){
+        super(titulo, ano_publicacao, numero_copias);
+        this.autor = autor;
+    }
+}
+
+class Dvd extends ItemBiblioteca {
+    int duracao_minutos;
+    public Dvd(String titulo, String ano_publicacao, int numero_copias, int duracao_minutos){
+        super(titulo, ano_publicacao, numero_copias);
+        this.duracao_minutos = duracao_minutos;
+    }
+}
+
+class Revista extends ItemBiblioteca {
+    int ano_edicao;
+    public Revista(String titulo, String ano_publicacao, int numero_copias, int ano_edicao){
+        super(titulo, ano_publicacao, numero_copias);
+        this.ano_edicao = ano_edicao;
+    }
+}
+
+public class Biblioteca {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int numeroCopiasL = 10, numeroCopiasD = 10, numeroCopiasR = 10;
+        int dias = 0, multa = 0;
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n--- Biblioteca ---");
+            System.out.println("1 - Emprestar Livro");
+            System.out.println("2 - Emprestar DVD");
+            System.out.println("3 - Emprestar Revista");
+            System.out.println("4 - Encerrar programa");
+            System.out.println("5 - Devolver (livro, DVD ou revista");
+            System.out.print("Escolha uma opção: ");
+            int op = sc.nextInt();
+            sc.nextLine(); // Limpa o buffer
+
+            switch (op) {
+                case 1:
+                    if (numeroCopiasL > 0) {
+                        System.out.println("Digite o título do livro: ");
+                        String tit = sc.nextLine();
+                        System.out.println("Ano de publicação: ");
+                        String ano = sc.nextLine();
+                        System.out.println("Nome do autor: ");
+                        String nome = sc.nextLine();
+                        numeroCopiasL--;
+                        System.out.println("Livro '" + tit + "' emprestado! Você tem 10 dias para devolvê-lo.");
+                    } else {
+                        System.out.println("não tem copias disponiveis.");
+                    }
+                    break;
+
+                case 2:
+                    if (numeroCopiasD > 0) {
+                        System.out.println("Digite o título do DVD: ");
+                        String tit = sc.nextLine();
+                        System.out.println("Ano de publicação: ");
+                        String ano = sc.nextLine();
+                        System.out.println("Duração (minutos): ");
+                        int duracao = sc.nextInt();
+                        sc.nextLine();
+                        numeroCopiasD--;
+                        System.out.println("DVD '" + tit + "' emprestado! Você tem 5 dias para devolvê-lo.");
+                    } else {
+                        System.out.println("não tem copias.");
+                    }
+                    break;
+
+                case 3:
+                    if (numeroCopiasR > 0) {
+                        System.out.println("Digite o título da Revista: ");
+                        String tit = sc.nextLine();
+                        System.out.println("Ano de publicação: ");
+                        String ano = sc.nextLine();
+                        System.out.println("Ano de edição: ");
+                        int edicao = sc.nextInt();
+                        sc.nextLine();
+                        numeroCopiasR--;
+                        System.out.println("Revista '" + tit + "' emprestada! Você tem 7 dias para devolvê-la.");
+                    } else {
+                        System.out.println("não tem copias.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Programa encerrado. Obrigado por utilizar a Biblioteca!");
+                    running = false;
+                    break;
+
+                case 5:
+                    System.out.println("O que você deseja devolver? (Livro, DVD, Revista)");
+                    String devolver = sc.nextLine();
+                    if (devolver.equalsIgnoreCase("livro")) {
+                        System.out.println("Você atrasou quantos dias para a devolução do livro? ");
+                        dias = sc.nextInt();
+                        sc.nextLine(); // Limpar o buffer
+                        multa = calcularMulta(dias);
+                        if (numeroCopiasL < 10) {
+                            numeroCopiasL++;
+                            System.out.println("Livro devolvido! Você vai pagar R$" + multa +
+                                    " reais de multa.");
+                        } else {
+                            System.out.println("O número de livros no estoque atingiu o limite!!");
+                        }
+                    }
+                    else if (devolver.equalsIgnoreCase("dvd")) {
+                        System.out.println("Você atrasou quantos dias para a devolução do DVD? ");
+                        dias = sc.nextInt();
+                        sc.nextLine();
+                       multa = calcularMulta(dias);
+                        if (numeroCopiasD < 10) {
+                            numeroCopiasD++;
+                            System.out.println("DVD devolvido! Você vai pagar R$" + multa +
+                                    " reais de multa.");
+                        } else {
+                            System.out.println("O número de DVDs no estoque atingiu o limite!!");
+                        }
+                    }
+
+                    else if (devolver.equalsIgnoreCase("revista")) {
+                        System.out.println("Você atrasou quantos dias para a devolução da revista? ");
+                        dias = sc.nextInt();
+                        sc.nextLine();
+                        multa = calcularMulta(dias);
+
+                        if (numeroCopiasR < 10) {
+                            numeroCopiasR++;
+                            System.out.println("Revista devolvida! Você vai pagar R$" + multa +
+                                    " reais de multa.");
+                        } else {
+                            System.out.println("O número de revistas no estoque atingiu o limite!!");
+                        }
+                    }
+                    else {
+                        System.out.println("Opção inválida!");
+                    }
+                    break;
+
+
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
+            }
+        }
+        sc.close();
+    }
+
+    public static int calcularMulta(int dias) {
+        return dias * 5;
+    }
+}
+
